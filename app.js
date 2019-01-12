@@ -14,13 +14,15 @@ if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
 
-const user = require('./src/routes/user')
+const user = require('./src/routes/user');
 const decks = require('./src/routes/decks');
-const auth = require('./src/routes/auth')
+const cards = require('./src/routes/cards');
+const auth = require('./src/routes/auth');
 
 app.use('/auth', auth);
 app.use('/user', user);
 app.use('/decks', decks);
+app.use('./cards', cards)
 
 
 app.use((err, req, res, next) => {
