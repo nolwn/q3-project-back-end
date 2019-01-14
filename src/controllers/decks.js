@@ -18,9 +18,19 @@ function getDeck (req, res, next) {
 };
 
 function create (req, res, next) {
-    const { title, released, director, rating, poster } = req.body;
-    decksModel.create()
-}
+    const creator = req.params.user_id
+    const { deckName, wins, losses } = req.body;
+    decksModel.create(deckName, creator, wins, losses)
+    .then(function(result) {
+        if (!deckName || deckName.length <= 0)
+            return next({ status: 400, message: "Your Deck must have a name!" });
+        
+        if(!creator)
+            return next({status: 400, message: "Deck Must be assigned to a user!"});
+        
+        res.status(201).send({ result })
+    })
+};
 
 module.exports = {
     getAll,

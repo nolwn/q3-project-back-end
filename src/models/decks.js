@@ -17,11 +17,22 @@ function getDeck(userId, deckId) {
     .returning('*')
 }
 
-function create() {
-    
+function create(deckName, creator, wins, losses) {
+    return db('decks')
+    .insert({
+        deck_name: deckName,
+        win_count: wins,
+        loss_count: losses,
+        user_id: creator
+    })
+    .returning('*')
+    .then(function([data]){
+        return data
+    })
 }
 
 module.exports = {
     getAll,
-    getDeck
+    getDeck,
+    create
 }
