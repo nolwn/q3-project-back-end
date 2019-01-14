@@ -1,0 +1,27 @@
+{
+  "name": "q3-project-back-end",
+  "version": "1.0.0",
+  "description": "An API which tracks a users Magic Decks.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "knex": "knex"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chriskistner/q3-project-back-end.git"
+  },
+  "author": "Nolan Hellyer and Chris Kistner",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chriskistner/q3-project-back-end/issues"
+  },
+  "homepage": "https://github.com/chriskistner/q3-project-back-end#readme",
+  "dependencies": {
+    "knex": "^0.16.3",
+    "pg": "^7.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.9"
+  }
+}

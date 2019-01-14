@@ -1,5 +1,5 @@
 const path = require('path')
-const devdb = 'galvanize_snacks_dev'
+const devdb = 'mtg'
 
 module.exports = {
   development: {
