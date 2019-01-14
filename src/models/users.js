@@ -17,7 +17,7 @@ function getUser(userId) {
 };
 
 function createUser(userName, password) {
-    return db('user')
+    return db('users')
     .where({user_name: userName })
     .then(function([result]) {
         if(result) {
@@ -28,8 +28,10 @@ function createUser(userName, password) {
     })
     .then(function(hashedPassword) {
         return (
-            db('user')
-            .insert({userName, hashedPassword})
+            db('users')
+            .insert({
+                user_name: userName, 
+                password: hashedPassword})
             .returning('*')
         )
     })
