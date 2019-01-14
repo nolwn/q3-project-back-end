@@ -29,10 +29,20 @@ function create(deckName, creator, wins, losses) {
     .then(function([data]){
         return data
     })
-}
+};
+
+function deleteDeck(userId, deckId) {
+    return db('decks')
+    .del()
+    .where({
+        id: deckId,
+        user_id: userId
+    })
+};
 
 module.exports = {
     getAll,
     getDeck,
-    create
+    create,
+    deleteDeck
 }

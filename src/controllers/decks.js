@@ -32,8 +32,17 @@ function create (req, res, next) {
     })
 };
 
+function deleteDeck (req, res, next) {
+    decksModel.deleteDeck(req.params.user_id, req.params.deck_id)
+    .then(result => {
+        if(!result) next({ status: 400, message: "Deck does not Exist"});
+        res.status(200).send({ result})
+    })
+};
+
 module.exports = {
     getAll,
     getDeck,
-    create
+    create,
+    deleteDeck
 }
