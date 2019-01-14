@@ -17,9 +17,9 @@ function createUser(req, res, next) {
 };
 
 function getUser (req, res, next) {
-    if(!req.params.userId) return next({status: 400, message: 'Bad Request, UserID is required'});
+    if(!req.params.user_id) return next({status: 400, message: 'Bad Request, UserID is required'});
 
-    userModel.getUser(req.params.userId)
+    userModel.getUser(req.params.user_id)
     .then(result => {
         if(!result) next({ status: 400, message: "User Not Found"});
         res.status(200).send({ result })
@@ -35,10 +35,18 @@ function getAllUsers (req, res, next) {
 };
 
 function deleteUser (req, res, next) {
-    userModel.deleteUser(req.params.id)
+    userModel.deleteUser(req.params.user_id)
     .then(result => {
         if(!result) next({ status: 400, message: "User does not Exist"});
         res.status(200).send({ result})
+    })
+}
+
+function getAllDecks (req, res, next) {
+    userModel.getAllDecks(req.params.user_id)
+    .then(result => {
+        if(!result) next({status: 400, message: "User has no decks!"});
+        res.status(200).send({ result })
     })
 }
 
@@ -48,5 +56,6 @@ module.exports = {
     createUser,
     getUser,
     getAllUsers,
-    deleteUser
+    deleteUser,
+    getAllDecks
 }

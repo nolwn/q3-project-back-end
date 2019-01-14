@@ -2,9 +2,9 @@
 const db = require('../../db');
 const bcrypt = require('bcrypt');
 
-function getUser(userName) {
+function getUser(userId) {
     return db('users')
-    .where({user_name: userName})
+    .where({id: userId})
     .then(function([result]) {
         if(result){
             return result
@@ -55,9 +55,17 @@ function createUser(userName, password) {
     })
 };
 
+function getAllDecks(userId) {
+    return db('users')
+    .leftJoin('decks', 'users.id', 'decks.user_id')
+    .where({user_id: userId})
+    .returning('*')
+};
+
 module.exports = {
     getUser,
     createUser,
     getAllUsers,
-    deleteUser
+    deleteUser,
+    getAllDecks
 }
