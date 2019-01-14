@@ -25,6 +25,7 @@ const getOne = (req, res, next) => {
         res.send(card)
       }
     })
+    .catch(next)
 }
 
 const create = (req, res, next) => {
@@ -36,8 +37,12 @@ const create = (req, res, next) => {
     .then(card => {
       if (!card) {
         next({ status: 400, error: 'Card not found.' })
+
+      } else {
+        res.send(card)
       }
     })
+    .catch(next)
 }
 
 module.exports = { getAll, getOne, create }

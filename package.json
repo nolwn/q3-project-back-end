@@ -4,7 +4,7 @@
   "description": "An API which tracks a users Magic Decks.",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "dev": "nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "knex": "knex"
   },
@@ -22,6 +22,7 @@
     "bcrypt": "^3.0.3",
     "body-parser": "^1.18.3",
     "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "knex": "^0.16.3",
