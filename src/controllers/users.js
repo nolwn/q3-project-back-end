@@ -48,6 +48,14 @@ function getAllDecks (req, res, next) {
         if(!result) next({status: 400, message: "User has no decks!"});
         res.status(200).send({ result })
     })
+};
+
+function getDeck (req, res, next) {
+    userModel.getDeck(req.params.user_id, req.params.deck_id)
+    .then(result => {
+        if(!result) next({status: 400, message: "Deck Does Not exist!"});
+        res.status(200).send({ result })
+    })
 }
 
 
@@ -57,5 +65,6 @@ module.exports = {
     getUser,
     getAllUsers,
     deleteUser,
-    getAllDecks
+    getAllDecks,
+    getDeck
 }

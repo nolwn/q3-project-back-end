@@ -62,10 +62,21 @@ function getAllDecks(userId) {
     .returning('*')
 };
 
+function getDeck(userId, deckId) {
+    return db('users')
+    .leftJoin('decks', 'users.id', 'decks.user_id')
+    .where({
+        'decks.id': deckId,
+        user_id: userId
+    })
+    .returning('*')
+}
+
 module.exports = {
     getUser,
     createUser,
     getAllUsers,
     deleteUser,
-    getAllDecks
+    getAllDecks,
+    getDeck
 }
