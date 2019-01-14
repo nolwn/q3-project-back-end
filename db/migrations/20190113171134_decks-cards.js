@@ -3,6 +3,7 @@ exports.up = function(knex, Promise) {
     table.increments()
     table.integer('card_id').references('id').inTable('cards')
     table.integer('deck_id').references('id').inTable('decks')
+    table.integer('qty').notNullable().defaultsTo(1);
   })
 }
 
