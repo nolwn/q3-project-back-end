@@ -21,7 +21,7 @@ const auth = require('./src/routes/auth');
 
 app.use('/auth', auth);
 app.use('/users', user);
-// app.use('/decks', decks);
+app.use('/users/:user_id/decks', decks);
 // app.use('./cards', cards)
 
 
