@@ -1,5 +1,5 @@
 const path = require('path')
-const devdb = 'mtg'
+const devdb = 'mtg_dev'
 
 module.exports = {
   development: {
