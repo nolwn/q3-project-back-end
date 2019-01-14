@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 
 function getUser(userId) {
     return db('users')
-    .where({id, userId})
+    .where({id: userId})
     .then(function([result]) {
         if(result){
             delete result.password
@@ -18,7 +18,7 @@ function getUser(userId) {
 
 function createUser(userName, password) {
     return db('user')
-    .where({user_name, userName })
+    .where({user_name: userName })
     .then(function([result]) {
         if(result) {
             throw {status: 400, message: "User Already Exists"}
