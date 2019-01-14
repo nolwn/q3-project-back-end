@@ -64,9 +64,25 @@ const create = (userId, deckId, newCard) => {
     })
 }
 
-// const updateQty = (userId, deckId, cardId) => {
-//
-// }
+const incrementQty = (userId, deckId, cardId) => {
+  return checkDeck(userId, deckId)
+    .then(_deck => {
+      return db('decks_cards')
+        .where({ deck_id: deckId, card_id: cardId })
+        .increment('qty', 1)
+        .returning('*')
+    })
+}
+
+const decrementQty = (userId, deckId, cardId) => {
+  return checkDeck(userId, deckId)
+    .then(_deck => {
+      return db('decks_cards')
+        .where({ deck_id: deckId, card_id: cardId })
+        .decrement('qty', 1)
+        .returning('*')
+    })
+}
 
 /*
  *  HELPER FUNCTIONS
@@ -85,4 +101,4 @@ const checkDeck = (userId, deckId) => {
     })
 }
 
-module.exports = { getAll, getOne, create }
+module.exports = { getAll, getOne, create, incrementQty, decrementQty }
