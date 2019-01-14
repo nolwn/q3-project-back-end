@@ -1,10 +1,10 @@
 
 exports.seed = function(knex, Promise) {
   // Deletes ALL existing entries
-  return knex('table_name').del()
+  return knex('cards').del()
     .then(function () {
       // Inserts seed entries
-      return knex('table_name').insert([
+      return knex('cards').insert([
         {
           id: 1,
           name: 'Gaea\'s Skyfolk',
@@ -170,6 +170,11 @@ exports.seed = function(knex, Promise) {
           colorless: 0,
           api_id: 'ee3e9e61-3136-5bce-9af6-37b7f44b93f4'
         }
-      ]);
-    });
+      ])
+    })
+    .then(() => {
+      return knex.raw(
+        `SELECT setval('cards_id_seq', (SELECT MAX(id) FROM cards))`
+      )
+    })
 };
