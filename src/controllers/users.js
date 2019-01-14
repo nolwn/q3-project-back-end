@@ -1,4 +1,4 @@
-const userModel = require('../models/user');
+const userModel = require('../models/users');
 
 function createUser(req, res, next) {
     if(!req.body.userName){

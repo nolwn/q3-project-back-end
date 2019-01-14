@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const userModel = require('./usermodel');
+const userModel = require('./users');
 
 function login(userName, password) {
     let user;
