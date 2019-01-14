@@ -32,6 +32,14 @@ function getAllUsers (req, res, next) {
         if(!result) next({ status: 400, message: "Server Error"});
         res.status(200).send({ result})
     })
+};
+
+function deleteUser (req, res, next) {
+    userModel.deleteUser(req.params.id)
+    .then(result => {
+        if(!result) next({ status: 400, message: "User does not Exist"});
+        res.status(200).send({ result})
+    })
 }
 
 
@@ -39,5 +47,6 @@ function getAllUsers (req, res, next) {
 module.exports = {
     createUser,
     getUser,
-    getAllUsers
+    getAllUsers,
+    deleteUser
 }
