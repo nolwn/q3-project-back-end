@@ -16,6 +16,10 @@ function getUser(userId) {
     })
 };
 
+function getAllUsers() {
+    return db('users')
+}
+
 function createUser(userName, password) {
     return db('users')
     .where({user_name: userName })
@@ -43,5 +47,6 @@ function createUser(userName, password) {
 
 module.exports = {
     getUser,
-    createUser
+    createUser,
+    getAllUsers
 }
