@@ -24,9 +24,20 @@ function getUser (req, res, next) {
         if(!result) next({ status: 400, message: "User Not Found"});
         res.status(200).send({ result })
     })
+};
+
+function getAllUsers (req, res, next) {
+    userModel.getAllUsers()
+    .then(result => {
+        if(!result) next({ status: 400, message: "Server Error"});
+        res.status(200).send({ result})
+    })
 }
+
+
 
 module.exports = {
     createUser,
-    getUser
+    getUser,
+    getAllUsers
 }
