@@ -15,9 +15,15 @@ function getDeck (req, res, next) {
         if(!result) next({status: 400, message: "Deck Does Not exist!"});
         res.status(200).send({ result })
     })
+};
+
+function create (req, res, next) {
+    const { title, released, director, rating, poster } = req.body;
+    decksModel.create()
 }
 
 module.exports = {
     getAll,
-    getDeck
+    getDeck,
+    create
 }
