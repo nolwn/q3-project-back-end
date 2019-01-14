@@ -2,7 +2,7 @@ const authModel = require('../models/auth');
 const jwt = require('jsonwebtoken');
 
 function login (req, res, next) {
-    if(!req.body.username) {
+    if(!req.body.userName) {
         return next({status: 400, message: "Invalid User Name!"})
     };
 
@@ -10,30 +10,31 @@ function login (req, res, next) {
         return next({ status: 400, message: "Password Missing!"})
     }
 
-    authModel.login(req.body.username, req.body.password) 
+    authModel.login(req.body.userName, req.body.password) 
         .then(function(user) {
 
             const token = jwt.sign({id: user.id}, process.env.SECRET)
 
             return res.status(200).send({ token })
         })
-        .catch(() => {
-            next()
+        .catch((err) => {
+            console.log(err)
+            next({status: 400, message: "login attempt failed"})
         });
 }
 
-function getAuthStatus() {
+function getAuthStatus(req, res, next) {
     res.status(200).send({id:req.claim.id})
 };
 
-function userAuthenticated(req, next) {
+function userAuthenticated(req, res, next) {
     if(!req.headers.authorization) {
         return next({status: 401, message: "Unauthorized User!"})
     }
 
     const [scheme, credentials] = req.headers.authorization.split(' ');
 
-    jwt.verify(credentials, prcess.env.SECRET, (err, payload) => {
+    jwt.verify(credentials, process.env.SECRET, (err, payload) => {
         if(err) {
             return next({status: 401, message: "Unauthorized User!"})
         }

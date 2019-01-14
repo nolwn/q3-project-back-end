@@ -7,6 +7,7 @@ function login(userName, password) {
     return userModel.getUser(userName)
     .then(function(data) {
         if (!data) throw {stats: 400, message: "No User By that Name Exists"};
+        console.log(data)
 
         user = data;
 
