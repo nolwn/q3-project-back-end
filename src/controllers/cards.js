@@ -19,7 +19,7 @@ const getOne = (req, res, next) => {
   models.getOne(userId, deckId, cardId)
     .then(card => {
       if (!card) {
-        next({ status: 400, error: "card not found" })
+        next({ status: 400, error: 'Card not found.' })
 
       } else {
         res.send(card)
@@ -35,7 +35,7 @@ const create = (req, res, next) => {
   models.create(userId, deckId, newCard)
     .then(card => {
       if (!card) {
-        next({ status: 400, error: "card not found" })
+        next({ status: 400, error: 'Card not found.' })
       }
     })
 }
