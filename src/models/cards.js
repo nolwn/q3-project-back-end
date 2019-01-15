@@ -11,12 +11,14 @@ const getAll = (userId, deckId) => {
 }
 
 const getOne = (userId, deckId, cardId) => {
-  return checkDeck(userId, deckId)
-    .then(_deck => {
-      return db('cards')
-        .first()
-        .where({ id: cardId })
-    })
+  return Promise.all([
+    () => checkDeck(userId, deckId),
+    () => getCard(cardId),
+    () => getTypes(cardId)
+  ])
+  .then(data => {
+    console.log(data)
+  })
 }
 
 const create = (userId, deckId, newCard) => {
@@ -107,6 +109,8 @@ const getCard = (cardId) => {
   return db('cards')
     .first()
     .where({ id: cardId })
+    .join('decks_cards', 'decks_cards.card_id', 'cards.id')
+    .select('cards.*', 'decks_cards.qty')
 }
 
 const getTypes = (cardId) => {
