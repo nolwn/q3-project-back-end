@@ -29,14 +29,14 @@ app.use(function(req, res, next) {
 })
 
 app.use((err, _req, res, _next)=> {
-    console.error(err)
-    const status = err.status || 500
-    const error = err.error || 'Internal Server Error'
-    const stack = err.stack
-    res.status(status).json({ error, status })
- })
+  console.error("ERROR: " + err)
+  const status = err.status || 500
+  const error = err.error || 'Internal Server Error'
+  const stack = err.stack
+  res.status(status).json({ error, status, stack })
+})
 
 if (process.env.NODE_ENV !== 'development') {
-    const listener = () => console.log(`listening on ${port}`)
-    let server = app.listen(port, listener)
+  const listener = () => console.log(`listening on ${port}`)
+  let server = app.listen(port, listener)
 }

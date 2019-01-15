@@ -17,8 +17,6 @@ const getAll = (userId, deckId) => {
       return acc;
     }, {})
 
-    console.log(cards)
-
     return cards.map(card => {
       card.types = typeObj[card.id]
       return card
@@ -39,7 +37,39 @@ const getOne = (userId, deckId, cardId) => {
 }
 
 const create = (userId, deckId, newCard) => {
+  const cardDetails = { ...newCard }
+  const cardTypes = newCard.types
+
+  let cardId;
+  let responseCard;
+  // let typeIds;
+
+  delete cardDetails.types
+
+  return Promise.all([
+    createCard(cardDetails),
+    createTypes(cardId, cardTypes)
+  ])
+    .then(([ card, typeIds ]) => {
+      responseCard = card;
+      return linkTypes(card.id, typeIds)
+    })
+    .then(cardId => {
+      console.log(cardId)
+      return linkDeck(deckId, cardId)
+    })
+    .then(() => {
+      return responseCard;
+    })
+}
+
+const xCreate = (userId, deckId, newCard) => {
+  const cardDetails = { ...newCard }
+  const typeDetails = { types: newCard.types }
   let response
+
+  delete cardDetails.types
+
   return checkDeck(userId, deckId)
     .then(deck => {
       return db('cards')
@@ -48,15 +78,33 @@ const create = (userId, deckId, newCard) => {
         .then(card => {
           if (!card) {
             return db('cards')
-              .insert( newCard )
+              .insert( cardDetails )
               .returning("*")
 
           } else {
-            return card
+            return getTypesFromCard(card.id)
+              .then(types => {
+                card.types = types
+
+                return card
+              })
           }
         })
         .then(card => {
-          response = card
+          if (!card.types) {
+            return createTypes(card.id, typeDetails)
+              .then(typeIds => {
+                return linkTypes(card.id, typeIds)
+              })
+              .then(types => {
+                card.types = types
+              })
+          }
+            response = card
+
+            return card;
+        })
+        .then(card => {
           return db('decks_cards')
             .first()
             .where({ card_id: response.id, deck_id: deckId })
@@ -72,7 +120,6 @@ const create = (userId, deckId, newCard) => {
           }
         })
         .then(deck_card => {
-          console.log(response)
           deck_card.qty++
           response.qty = deck_card.qty
           return db('decks_cards')
@@ -157,6 +204,100 @@ const getTypesFromDeck = (deckId) => {
     .join('types', 'cards_types.type_id', 'types.id')
     .select('types.*', 'cards_types.card_id')
     .where('decks_cards.deck_id', deckId)
+}
+
+const createTypes = (cardId, cardTypes) => {
+  let typeIds = [];
+
+  return db('types')
+    .select('*')
+    .whereIn('type', cardTypes )
+    .then(types => {
+      const typeNames = types.map(el => {
+        typeIds.push(el.id)
+        return el.type
+      })
+      return cardTypes.filter(cardType => !typeNames.includes(cardType))
+    })
+    .then(types => {
+      const typeObjs = types.map(type => {
+        return { type: type }
+      })
+      if(typeObjs.length > 0) {
+        return db('types')
+        .insert(typeObjs)
+        .returning('id')
+        .then(ids => {
+          typeIds = typeIds.concat(ids)
+          return typeIds
+        })
+      }
+      return typeIds
+    })
+}
+
+const createCard = (cardDetails) => {
+  return db('cards')
+    .first()
+    .where({ api_id: cardDetails.api_id })
+    .then(card => {
+      if (!card) {
+        return db('cards')
+          .insert( cardDetails )
+          .returning("*")
+          .then(data => data[0])
+
+      } else {
+          return card
+      }
+    })
+}
+
+const linkTypes = (cardId, typeIds) => {
+  const cardsTypes = typeIds.map(typeId => {
+    return { card_id: cardId, type_id: typeId }
+  })
+  return db('cards_types')
+    .select('*')
+    .where({ card_id: cardId })
+    .then(data => {
+      if (data.length < 1) {
+        return db('cards_types')
+        .insert(cardsTypes)
+        .returning("*")
+        .then(() => {
+          return cardId
+        })
+
+      } else {
+        return cardId
+      }
+
+    })
+}
+
+const linkDeck = (deckId, cardId) => {
+  return db('decks_cards')
+    .first()
+    .where({ card_id: cardId, deck_id: deckId })
+    .then(deck_card => {
+      if(!deck_card) {
+        return db('decks_cards')
+          .insert({ card_id: cardId, deck_id: deckId, qty: 0 })
+          .returning("*")
+          .then(newDeckCard => newDeckCard[0])
+
+      } else {
+        return deck_card
+      }
+    })
+    .then(deck_card => {
+      console.log(deck_card)
+      deck_card.qty++
+      return db('decks_cards')
+      .where({ id: deck_card.id })
+        .update({ qty: deck_card.qty })
+    })
 }
 
 module.exports = { getAll, getOne, create, incrementQty, decrementQty }

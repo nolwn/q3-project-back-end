@@ -39,7 +39,7 @@ const create = (req, res, next) => {
         next({ status: 400, error: 'Card not found.' })
 
       } else {
-        res.send(card)
+        res.status(400).send(card)
       }
     })
     .catch(next)
