@@ -4,6 +4,8 @@ const getAll = (userId, deckId) => {
   return checkDeck(userId, deckId)
     .then(_deck => {
       return db('cards')
+        .join('decks_cards', 'cards.id', 'decks_cards.card_id')
+        .select('cards.*', 'decks_cards.qty')
     })
 
 }
@@ -98,6 +100,25 @@ const checkDeck = (userId, deckId) => {
       }
 
       return deck
+    })
+}
+
+const getCard = (cardId) => {
+  return db('cards')
+    .first()
+    .where({ id: cardId })
+}
+
+const getTypes = (cardId) => {
+  return db('cards_types')
+    .select('type_id')
+    .where({ card_id: cardId })
+    .then(types => {
+      const typeIds = types.map(type => type.type_id);
+
+      return db('types')
+        .select()
+        .whereIn(typeIds)
     })
 }
 

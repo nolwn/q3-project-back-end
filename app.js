@@ -33,6 +33,7 @@ app.use((err, _req, res, _next)=> {
     console.error(err)
     const status = err.status || 500
     const error = err.error || 'Internal Server Error'
+    const stack = err.stack
     res.status(status).json({ error, status })
  })
 
