@@ -38,11 +38,27 @@ function deleteDeck(userId, deckId) {
         id: deckId,
         user_id: userId
     })
+    .returning('*')
+};
+
+function update(deckId, deckName, creator, wins, losses) {
+    return db('decks')
+    .update({
+        deck_name: deckName,
+        win_count: wins,
+        loss_count: losses
+    })
+    .where({
+        id: deckId,
+        user_id: creator
+    })
+    .returning('*')
 };
 
 module.exports = {
     getAll,
     getDeck,
     create,
-    deleteDeck
-}
+    deleteDeck,
+    update
+};

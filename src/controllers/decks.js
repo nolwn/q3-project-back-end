@@ -20,7 +20,7 @@ function getDeck (req, res, next) {
 function create (req, res, next) {
     const creator = req.params.user_id
     const { deckName, wins, losses } = req.body;
-    decksModel.create(deckName, creator, wins, losses)
+    decksModel.create(deckName, wins, losses)
     .then(function(result) {
         if (!deckName || deckName.length <= 0)
             return next({ status: 400, message: "Your Deck must have a name!" });
@@ -40,9 +40,26 @@ function deleteDeck (req, res, next) {
     })
 };
 
+function update(req, res, next) {
+    const creator = req.params.user_id;
+    const deck = req.params.deck_id;
+    const {deckName, wins, losses } = req.body;
+    decksModel.update(deck, deckName, creator, wins, losses)
+    .then(function(result){
+        if (!deckName || deckName.length <= 0)
+            return next({ status: 400, message: "Your Deck must have a name!" });
+    
+        if(!creator)
+            return next({status: 400, message: "Deck Must be assigned to a user!"});
+    
+    res.status(201).send({ result })
+    })
+}
+
 module.exports = {
     getAll,
     getDeck,
     create,
-    deleteDeck
+    deleteDeck,
+    update
 }
