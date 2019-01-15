@@ -1,23 +1,40 @@
 const db = require('../../db')
 
 const getAll = (userId, deckId) => {
-  return checkDeck(userId, deckId)
-    .then(_deck => {
-      return db('cards')
-        .join('decks_cards', 'cards.id', 'decks_cards.card_id')
-        .select('cards.*', 'decks_cards.qty')
-    })
+  return Promise.all([
+    checkDeck(userId, deckId),
+    getCards(deckId),
+    getTypesFromDeck(deckId)
+  ])
+  .then(([ _, cards, types ]) => {
+    const typeObj = types.reduce((acc, type) => {
+      if (!acc[type.card_id]) {
+        acc[type.card_id] = []
+      }
 
+      acc[type.card_id].push(type.type)
+
+      return acc;
+    }, {})
+
+    console.log(cards)
+
+    return cards.map(card => {
+      card.types = typeObj[card.id]
+      return card
+    })
+  })
 }
 
 const getOne = (userId, deckId, cardId) => {
   return Promise.all([
-    () => checkDeck(userId, deckId),
-    () => getCard(cardId),
-    () => getTypes(cardId)
+    checkDeck(userId, deckId),
+    getCard(cardId),
+    getTypesFromCard(cardId)
   ])
-  .then(data => {
-    console.log(data)
+  .then(([ deck, card, types ]) => {
+    card.types = types.map(type => type.type)
+    return card;
   })
 }
 
@@ -108,22 +125,38 @@ const checkDeck = (userId, deckId) => {
 const getCard = (cardId) => {
   return db('cards')
     .first()
-    .where({ id: cardId })
+    .where('cards.id', cardId)
     .join('decks_cards', 'decks_cards.card_id', 'cards.id')
     .select('cards.*', 'decks_cards.qty')
 }
 
-const getTypes = (cardId) => {
+const getCards = (deckId) => {
+  return db('cards')
+    .join('decks_cards', 'cards.id', 'decks_cards.card_id')
+    .where('decks_cards.deck_id', deckId)
+    .select('cards.*', 'decks_cards.qty')
+}
+
+const getTypesFromCard = (cardId) => {
   return db('cards_types')
     .select('type_id')
     .where({ card_id: cardId })
     .then(types => {
-      const typeIds = types.map(type => type.type_id);
+      const typeIds = types.map(type => type.type_id)
 
       return db('types')
         .select()
-        .whereIn(typeIds)
+        .whereIn('id', typeIds)
     })
+}
+
+const getTypesFromDeck = (deckId) => {
+  return db('decks_cards')
+    .join('cards', 'cards.id', 'decks_cards.card_id')
+    .join('cards_types', 'cards.id', 'cards_types.card_id')
+    .join('types', 'cards_types.type_id', 'types.id')
+    .select('types.*', 'cards_types.card_id')
+    .where('decks_cards.deck_id', deckId)
 }
 
 module.exports = { getAll, getOne, create, incrementQty, decrementQty }
