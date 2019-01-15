@@ -2,9 +2,9 @@
 const db = require('../../db');
 const bcrypt = require('bcrypt');
 
-function getUser(userName) {
+function getUser(userId) {
     return db('users')
-    .where({user_name: userName})
+    .where({id: userId})
     .then(function([result]) {
         if(result){
             return result
@@ -59,5 +59,5 @@ module.exports = {
     getUser,
     createUser,
     getAllUsers,
-    deleteUser
+    deleteUser,
 }

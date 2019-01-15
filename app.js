@@ -19,11 +19,10 @@ const decks = require('./src/routes/decks');
 const cards = require('./src/routes/cards');
 const auth = require('./src/routes/auth');
 
-app.use('/auth', auth)
-app.use('/users', user)
-// app.use('/users/:user_id/decks', decks)
+app.use('/auth', auth);
+app.use('/users', user);
+app.use('/users/:user_id/decks', decks);
 app.use('/users/:user_id/decks/:deck_id/cards', cards)
-
 
 app.use(function(req, res, next) {
   next({status: 404, error: 'Route Not Found'})
