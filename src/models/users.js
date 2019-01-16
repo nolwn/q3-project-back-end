@@ -44,7 +44,7 @@ function createUser(userName, password) {
         return (
             db('users')
             .insert({
-                user_name: userName, 
+                user_name: userName,
                 password: hashedPassword})
             .returning('*')
         )

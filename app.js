@@ -8,7 +8,9 @@ const port = process.env.PORT || 3000
 app.disable('x-powered-by');
 app.use(bodyParser.json());
 app.use(cors());
-require('dotenv').config();
+require('dotenv').load();
+
+console.log('SECRET: ', process.env.SECRET )
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
