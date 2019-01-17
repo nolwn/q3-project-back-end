@@ -26,7 +26,6 @@ function getAuthStatus(req, res, next) {
 };
 
 function userAuthenticated(req, res, next) {
-    console.log(req.headers.authorization)
     if(!req.headers.authorization) {
         return next({status: 401, error: "Unauthorized User!"})
     }

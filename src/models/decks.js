@@ -12,12 +12,13 @@ function getDeck(userId, deckId) {
     .leftJoin('decks', 'users.id', 'decks.user_id')
     .where({
         'decks.id': deckId,
-        user_id: userId
+         user_id: userId
     })
     .returning('*')
 }
 
 function create(deckName, creator, wins, losses) {
+    console.log(creator)
     return db('decks')
     .insert({
         deck_name: deckName,

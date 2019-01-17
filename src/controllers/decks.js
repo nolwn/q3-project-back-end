@@ -18,9 +18,9 @@ function getDeck (req, res, next) {
 };
 
 function create (req, res, next) {
-    const creator = req.params.user_id
+    const creator = req.params.user_id;
     const { deckName, wins, losses } = req.body;
-    decksModel.create(deckName, wins, losses)
+    decksModel.create(deckName, creator, wins, losses)
     .then(function(result) {
         if (!deckName || deckName.length <= 0)
             return next({ status: 400, message: "Your Deck must have a name!" });
