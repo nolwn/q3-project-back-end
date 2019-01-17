@@ -83,6 +83,17 @@ const decrementQty = (userId, deckId, cardId) => {
     })
 }
 
+const remove = (userId, deckId, cardId) => {
+    return checkDeck(userId, deckId)
+        .then(_deck => {
+            return db('decks_cards')
+                .where({ deck_id: deckId, card_id: cardId })
+                .del()
+                .returning('*')
+                .then(cards => cards[0])
+        })
+}
+
 /*
  *  HELPER FUNCTIONS
  */
@@ -231,4 +242,4 @@ const linkDeck = (deckId, cardId) => {
     })
 }
 
-module.exports = { getAll, getOne, create, incrementQty, decrementQty }
+module.exports = { getAll, getOne, create, incrementQty, decrementQty, remove }
