@@ -12,7 +12,7 @@ function getDeck(userId, deckId) {
     .leftJoin('decks', 'users.id', 'decks.user_id')
     .where({
         'decks.id': deckId,
-        user_id: userId
+         user_id: userId
     })
     .returning('*')
 }

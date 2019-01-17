@@ -10,8 +10,6 @@ app.use(bodyParser.json());
 app.use(cors());
 require('dotenv').load();
 
-console.log('SECRET: ', process.env.SECRET )
-
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan('dev'))
 }
@@ -31,7 +29,7 @@ app.use(function(req, res, next) {
 })
 
 app.use((err, _req, res, _next)=> {
-  console.error("ERROR: " + err)
+  console.error("ERROR: ", err)
   const status = err.status || 500
   const error = err.error || 'Internal Server Error'
   const stack = err.stack
