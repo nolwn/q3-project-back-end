@@ -31,7 +31,7 @@ app.use(function(req, res, next) {
 })
 
 app.use((err, _req, res, _next)=> {
-  console.error("ERROR: " + err)
+  console.error("ERROR: ", err)
   const status = err.status || 500
   const error = err.error || 'Internal Server Error'
   const stack = err.stack
