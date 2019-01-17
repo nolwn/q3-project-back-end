@@ -55,7 +55,6 @@ const create = (userId, deckId, newCard) => {
       return linkTypes(card.id, typeIds)
     })
     .then(cardId => {
-      console.log(cardId)
       return linkDeck(deckId, cardId)
     })
     .then(() => {
@@ -223,7 +222,6 @@ const linkDeck = (deckId, cardId) => {
       }
     })
     .then(deck_card => {
-      console.log(deck_card)
       deck_card.qty++
       return db('decks_cards')
       .where({ id: deck_card.id })
