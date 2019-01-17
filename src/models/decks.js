@@ -18,7 +18,6 @@ function getDeck(userId, deckId) {
 }
 
 function create(deckName, creator, wins, losses) {
-    console.log(creator)
     return db('decks')
     .insert({
         deck_name: deckName,
