@@ -94,7 +94,7 @@ const remove = (req, res, next) => {
                 next({ status: 400, error: 'Card could not be removed' })
 
             } else {
-                res.send(card)
+                res.status(200).send(card)
             }
         })
         .catch(next)
