@@ -56,7 +56,7 @@ const incrementQty = (req, res, next) => {
           next({ status: 400, error: 'Card not found.' })
 
         } else {
-          res.send(card)
+          res.send(card[0])
         }
       })
       .catch(next)
