@@ -84,8 +84,6 @@ const remove = (req, res, next) => {
     const deckId = req.params.deck_id
     const cardId = req.params.card_id
 
-    console.log(userId, deckId, cardId)
-
     models.remove(userId, deckId, cardId)
         .then(card => {
             if (!card) {
