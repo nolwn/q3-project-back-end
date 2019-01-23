@@ -33,13 +33,15 @@ const create = (req, res, next) => {
   const deckId = req.params.deck_id
   const newCard = req.body
 
+  console.log(userId, deckId, newCard)
+
   models.create(userId, deckId, newCard)
     .then(card => {
       if (!card) {
         next({ status: 400, error: 'Card not found.' })
 
       } else {
-        res.status(400).send(card)
+        res.status(201).send(card)
       }
     })
     .catch(next)
@@ -90,7 +92,7 @@ const remove = (req, res, next) => {
                 next({ status: 400, error: 'Card could not be removed' })
 
             } else {
-                res.send(card)
+                res.status(200).send(card)
             }
         })
         .catch(next)
