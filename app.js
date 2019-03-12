@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const cors = require('cors')
 const app = express();
-const port = process.env.PORT || 8080
+const port = process.env.PORT || 3000
 
 app.disable('x-powered-by');
 app.use(bodyParser.json());
